@@ -10,7 +10,7 @@ const uuid = require('./public/assets/js/uuid');
 
 const app = express();
 
-const postData = JSON.parse(fs.readFileSync('/db/db.json'));
+const postData = JSON.parse(fs.readFileSync('db/db.json', 'utf-8'));
 
 //middleware
 app.use(express.json());
@@ -25,6 +25,18 @@ app.get('/notes', (req, res) =>{
 app.get('/api/notes', (req, res) => {
     res.json(postData);
 })
+
+app.post('/api/notes', (req, res) => {
+    const { title, text } = req.body;
+    if (title && text) {
+        const postNew = {
+            title,
+            text,
+            id: uuid(),
+        }
+    }
+    postData.push(postNew);
+});
 
 app.listen(PORT, () =>
     console.log(`App listening at http://localhost:${PORT}`)
