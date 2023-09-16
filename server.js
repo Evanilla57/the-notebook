@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 //pathway
-app.get('/notes', (req, res) =>{
+app.get('/notes', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/notes.html'))
 });
 
@@ -36,6 +36,16 @@ app.post('/api/notes', (req, res) => {
         }
     }
     postData.push(postNew);
+    fs.writeFileSync(
+        './db/db.json',
+        JSON.stringify(postData),
+        (err) => {
+            if (err) {
+                throw err
+            }
+            console.info('Successfully updated notes!')
+        }
+    )
 });
 
 app.listen(PORT, () =>
