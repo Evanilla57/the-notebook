@@ -10,7 +10,7 @@ const uuid = require('./public/assets/js/uuid');
 
 const app = express();
 
-const postData = JSON.parse(fs.readFileSync('db/db.json', 'utf-8'));
+let postData = JSON.parse(fs.readFileSync('db/db.json', 'utf-8'));
 
 //middleware
 app.use(express.json());
@@ -34,8 +34,27 @@ app.post('/api/notes', (req, res) => {
             text,
             id: uuid(),
         }
+        postData.push(postNew);
+        fs.writeFileSync(
+            './db/db.json',
+            JSON.stringify(postData),
+            (err) => {
+                if (err) {
+                    throw err
+                }
+                console.info('Successfully updated notes!')
+            })
+            .then((res) => {
+                return res.body;
+            }
+            )
     }
-    postData.push(postNew);
+});
+
+app.delete("/api/notes/:id", function (req, res) {
+    console.log("req params", req.params.id)
+    postData = postData.filter(({ id }) => id !== req.params.id);
+    console.log('deletin time');
     fs.writeFileSync(
         './db/db.json',
         JSON.stringify(postData),
@@ -44,8 +63,11 @@ app.post('/api/notes', (req, res) => {
                 throw err
             }
             console.info('Successfully updated notes!')
+        })
+        .then((res) => {
+            return res.body;
         }
-    )
+        )
 });
 
 app.listen(PORT, () =>
