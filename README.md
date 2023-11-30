@@ -32,8 +32,8 @@ THEN I am presented with empty fields to enter a new note title and the note’s
 
 ## Usage
 
-Video Demonstration:
-
+Install dependencies: npm i
+Run application: npm start
 
 ## Links
 GitHub Repo Page: https://github.com/Evanilla57/the-notebook
